@@ -62,4 +62,7 @@ public abstract class IslandObject {
     }
 
     public abstract void step();
+
+    public int getY() {return y;}
+    public int getX() {return x;}
 }

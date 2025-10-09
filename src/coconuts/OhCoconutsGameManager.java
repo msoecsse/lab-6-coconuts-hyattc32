@@ -3,9 +3,13 @@ package coconuts;
 // https://stackoverflow.com/questions/42443148/how-to-correctly-separate-view-from-model-in-javafx
 
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 // This class manages the game, including tracking all island objects and detecting when they hit
 public class OhCoconutsGameManager {
@@ -22,6 +26,9 @@ public class OhCoconutsGameManager {
     private int coconutsInFlight = 0;
     private int gameTick = 0;
 
+    private MediaPlayer mediaPlayer;
+    private Media media;
+
     public OhCoconutsGameManager(int height, int width, Pane gamePane) {
         this.height = height;
         this.width = width;
@@ -35,6 +42,13 @@ public class OhCoconutsGameManager {
         registerObject(theBeach);
         if (theBeach.getImageView() != null)
             System.out.println("Unexpected image view for beach");
+
+
+        String bgm = "images/CrabMusic.mp3";
+        media = new Media(new File(bgm).toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
     }
 
     private void registerObject(IslandObject object) {
@@ -109,5 +123,18 @@ public class OhCoconutsGameManager {
 
     public boolean done() {
         return coconutsInFlight == 0 && gameTick >= MAX_TIME;
+    }
+
+    //makes a laser of both sides of a crab
+    //and adds them to the list of every object -Jacob
+    public void makeLaser(){
+        LaserBeam laser1 = new LaserBeam(this, theCrab.getY(), theCrab.getX());
+        gamePane.getChildren().add(laser1.getImageView());
+        LaserBeam laser2 = new LaserBeam(this, theCrab.getY(), theCrab.getX() + theCrab.width);
+        gamePane.getChildren().add(laser2.getImageView());
+
+        registerObject(laser1);
+        registerObject(laser2);
+
     }
 }
