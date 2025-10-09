@@ -1,5 +1,6 @@
 package coconuts;
 
+import javafx.animation.Animation;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -42,10 +43,19 @@ public class GameController {
 
     @FXML
     public void onKeyPressed(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.RIGHT && !theGame.done()) {
-            theGame.getCrab().crawl(10);
-        } else if (keyEvent.getCode() == KeyCode.LEFT && !theGame.done()) {
-            theGame.getCrab().crawl(-10);
+        if (keyEvent.getCode() == KeyCode.RIGHT && !theGame.done() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
+            if(keyEvent.isShiftDown()){
+                theGame.getCrab().crawl(30);
+            } else {
+                theGame.getCrab().crawl(10);
+            }
+
+        } else if (keyEvent.getCode() == KeyCode.LEFT && !theGame.done() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
+            if(keyEvent.isShiftDown()){
+                theGame.getCrab().crawl(-30);
+            } else {
+                theGame.getCrab().crawl(-10);
+            }
         } else if (keyEvent.getCode() == KeyCode.SPACE) {
             if (!started) {
                 coconutTimeline.play();
@@ -54,7 +64,7 @@ public class GameController {
                 coconutTimeline.pause();
                 started = false;
             }
-        } else if (keyEvent.getCode() == KeyCode.UP && !theGame.done()) {
+        } else if (keyEvent.getCode() == KeyCode.UP && !theGame.done() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
             theGame.makeLaser();
         }
     }
