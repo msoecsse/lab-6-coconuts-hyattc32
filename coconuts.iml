@@ -10,7 +10,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="javafx" level="application" />
-    <orderEntry type="library" exported="" name="newerJavaFX" level="application" />
+    <orderEntry type="library" exported="" name="javafx" level="application" />
+    <orderEntry type="library" name="newerJavaFX" level="application" />
   </component>
 </module>
