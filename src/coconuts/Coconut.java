@@ -9,7 +9,7 @@ public class Coconut extends HittableIslandObject {
     private static final Image coconutImage = new Image("file:images/coco-1.png");
 
     public Coconut(OhCoconutsGameManager game, int x) {
-        super(game, x, 50, WIDTH, coconutImage);
+        super(game, x, 0, WIDTH, coconutImage);
     }
 
     @Override

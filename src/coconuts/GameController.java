@@ -30,9 +30,9 @@ public class GameController {
     public VBox skyAndSand;
     private OhCoconutsGameManager theGame;
     @FXML
-    private Label cocoOnGroundTextField;
+    public static Label cocoOnGroundLabel;
     @FXML
-    private Label cocoDestroyedTextField;
+    public static Label cocoDestroyedLabel;
 
 
     @FXML
