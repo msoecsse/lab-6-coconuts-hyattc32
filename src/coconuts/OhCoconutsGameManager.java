@@ -109,30 +109,32 @@ public class OhCoconutsGameManager {
         scheduledForRemoval.clear();
 
         for(Coconut c : coconuts) {
-            if(theCrab != null && theCrab.coconutHit(c.getX(), c.getY())) {
-                theCrab.notifyObservers();
-                gamePane.getChildren().remove(theCrab.getImageView());
-                allObjects.remove(theCrab);
-                killCrab();
-                scheduleForDeletion(c);
-            }
+            if(theCrab != null) {
+                for(LaserBeam b : lasers) {
+                    if(theCrab != null && b.coconutHit(c.getX(), c.getY())) {
+                        b.notifyObservers();
+                        scheduleForDeletion(c);
+                        scheduleForDeletion(b);
+                    }
+                    if(b.getY() < 0){
+                        scheduleForDeletion(b);
+                    }
+                }
 
-            for(LaserBeam b : lasers) {
-                if(theCrab != null && b.coconutHit(c.getX(), c.getY())) {
-                    //TODO properly call observer
-                    //move this stuff into update method
+                if (c.getY() >= theCrab.getY()) {
                     scheduleForDeletion(c);
-                    scheduleForDeletion(b);
+                    c.notifyObservers();
                 }
-                if(b.getY() < 0){
-                    scheduleForDeletion(b);
+
+                if(theCrab.coconutHit(c.getX(), c.getY())) {
+                    theCrab.notifyObservers();
+                    gamePane.getChildren().remove(theCrab.getImageView());
+                    allObjects.remove(theCrab);
+                    killCrab();
+                    scheduleForDeletion(c);
                 }
             }
 
-            if (c.getY() >= theCrab.getY()) {
-                scheduleForDeletion(c);
-                c.notifyObservers();
-            }
         }
 
         // actually remove the objects as needed
@@ -169,6 +171,8 @@ public class OhCoconutsGameManager {
         registerObject(laser2);
         lasers.add(laser1);
         lasers.add(laser2);
+        laser1.attach(new CocoLaserObserver());
+        laser2.attach(new CocoLaserObserver());
 
     }
 

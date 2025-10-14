@@ -32,11 +32,16 @@ public class GameController {
     @FXML
     public static Label cocoOnGroundLabel;
     @FXML
-    public static Label cocoDestroyedLabel;
+    private Label cocoDestroyedLabel;
+
+    public static Label cocoLaserLabel;
 
 
     @FXML
     public void initialize() {
+        cocoLaserLabel = cocoDestroyedLabel;
+
+
         theGame = new OhCoconutsGameManager((int) (gamePane.getPrefHeight() - theBeach.getPrefHeight()),
                 (int) (gamePane.getPrefWidth()), gamePane);
 
@@ -66,7 +71,7 @@ public class GameController {
             } else {
                 theGame.getCrab().crawl(-10);
             }
-        } else if (keyEvent.getCode() == KeyCode.SPACE) {
+        } else if (keyEvent.getCode() == KeyCode.SPACE && theGame.getCrab() != null) {
             if (!started) {
                 coconutTimeline.play();
                 started = true;
@@ -77,6 +82,10 @@ public class GameController {
         } else if (keyEvent.getCode() == KeyCode.UP && theGame.getCrab() != null && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
             theGame.makeLaser();
         }
+
+        if(theGame.getCrab() == null){
+            coconutTimeline.pause();
+        }
         if(keyEvent.getCode() == KeyCode.R) {
             theGame.resetGame();
             theGame = null;
@@ -84,5 +93,6 @@ public class GameController {
             coconutTimeline = null;
             initialize();
         }
+
     }
 }

@@ -3,6 +3,7 @@ package coconuts;
 public class CocoLaserObserver implements Observer {
     @Override
     public void update() {
-        //test
+        GameController.cocoLaserLabel.setText(
+                "" + (1 + Integer.parseInt(GameController.cocoLaserLabel.getText())));
     }
 }
