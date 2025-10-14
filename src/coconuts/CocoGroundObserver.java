@@ -7,6 +7,6 @@ public class CocoGroundObserver implements Observer {
 
     @Override
     public void update() {
-        //GameController.cocoOnGroundLabel.setText(String.valueOf(Integer.parseInt(GameController.cocoOnGroundLabel.getText()) + 1));
+        GameController.cocoHitGroundLabel.setText(String.valueOf(Integer.parseInt(GameController.cocoHitGroundLabel.getText()) + 1));
     }
 }

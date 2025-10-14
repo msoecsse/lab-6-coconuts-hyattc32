@@ -30,17 +30,17 @@ public class GameController {
     public VBox skyAndSand;
     private OhCoconutsGameManager theGame;
     @FXML
-    public static Label cocoOnGroundLabel;
+    public Label cocoOnGroundLabel;
     @FXML
     private Label cocoDestroyedLabel;
 
     public static Label cocoLaserLabel;
-
+    public static Label cocoHitGroundLabel;
 
     @FXML
     public void initialize() {
         cocoLaserLabel = cocoDestroyedLabel;
-
+        cocoHitGroundLabel = cocoOnGroundLabel;
 
         theGame = new OhCoconutsGameManager((int) (gamePane.getPrefHeight() - theBeach.getPrefHeight()),
                 (int) (gamePane.getPrefWidth()), gamePane);
@@ -83,14 +83,13 @@ public class GameController {
             theGame.makeLaser();
         }
 
-        if(theGame.getCrab() == null){
-            coconutTimeline.pause();
-        }
         if(keyEvent.getCode() == KeyCode.R) {
             theGame.resetGame();
             theGame = null;
             coconutTimeline.pause();
             coconutTimeline = null;
+            cocoHitGroundLabel.setText("0");
+            cocoLaserLabel.setText("0");
             initialize();
         }
 
