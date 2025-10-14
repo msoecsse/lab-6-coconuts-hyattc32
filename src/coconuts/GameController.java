@@ -2,11 +2,14 @@ package coconuts;
 
 import javafx.animation.Animation;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 // JavaFX Controller class for the game - generally, JavaFX elements (other than Image) should be here
@@ -23,7 +26,14 @@ public class GameController {
     private Pane gamePane;
     @FXML
     private Pane theBeach;
+    @FXML
+    public VBox skyAndSand;
     private OhCoconutsGameManager theGame;
+    @FXML
+    private Label cocoOnGroundTextField;
+    @FXML
+    private Label cocoDestroyedTextField;
+
 
     @FXML
     public void initialize() {
@@ -67,5 +77,6 @@ public class GameController {
         } else if (keyEvent.getCode() == KeyCode.UP && !theGame.done() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
             theGame.makeLaser();
         }
+        // TODO add key event if it is r to reset the game
     }
 }
