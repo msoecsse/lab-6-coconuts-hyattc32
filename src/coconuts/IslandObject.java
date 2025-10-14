@@ -37,6 +37,10 @@ public abstract class IslandObject {
         }
     }
 
+    public void removeImage() {
+        imageView = null;
+    }
+
     public boolean isHittable() {
         return false;
     }

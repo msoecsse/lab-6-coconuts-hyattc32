@@ -20,4 +20,16 @@ public class LaserBeam extends IslandObject {
     public void step() {
         y -= 3;
     }
+
+    public boolean coconutHit(int coconutX, int coconutY) {
+        int coconutWidth = 50;
+        if(x > coconutX && x < coconutX + coconutWidth &&
+                y > coconutY && y < coconutY + coconutWidth){
+            // TODO notify observers and delete carb
+
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -26,6 +26,9 @@ public class OhCoconutsGameManager {
     private int coconutsInFlight = 0;
     private int gameTick = 0;
 
+    private List<Coconut> coconuts;
+    private List<LaserBeam> lasers;
+
     private MediaPlayer mediaPlayer;
     private Media media;
 
@@ -33,6 +36,9 @@ public class OhCoconutsGameManager {
         this.height = height;
         this.width = width;
         this.gamePane = gamePane;
+
+        coconuts = new LinkedList<>();
+        lasers = new LinkedList<>();
 
         this.theCrab = new Crab(this, height, width);
         registerObject(theCrab);
@@ -76,6 +82,7 @@ public class OhCoconutsGameManager {
             coconutsInFlight += 1;
             Coconut c = new Coconut(this, (int) (Math.random() * width));
             registerObject(c);
+            coconuts.add(c);
             gamePane.getChildren().add(c.getImageView());
         }
         gameTick++;
@@ -107,9 +114,31 @@ public class OhCoconutsGameManager {
                 }
             }
         }
+
+        for(Coconut c : coconuts) {
+            if(theCrab != null && theCrab.coconutHit(c.getX(), c.getY())) {
+                //TODO properly call observer
+                System.out.println("Coconut hit");
+                scheduleForDeletion(c);
+            }
+
+            for(LaserBeam b : lasers) {
+                if(theCrab != null && b.coconutHit(c.getX(), c.getY())) {
+                    System.out.println("Laser hit");
+                    scheduleForDeletion(c);
+                }
+            }
+
+        }
+
         // actually remove the objects as needed
         for (IslandObject thisObj : scheduledForRemoval) {
             allObjects.remove(thisObj);
+            if(coconuts.contains(thisObj)) {
+                coconuts.remove(thisObj);
+                gamePane.getChildren().remove(thisObj.getImageView());
+                thisObj.removeImage();
+            }
             if (thisObj instanceof HittableIslandObject) {
                 hittableIslandSubjects.remove((HittableIslandObject) thisObj);
             }
@@ -135,6 +164,8 @@ public class OhCoconutsGameManager {
 
         registerObject(laser1);
         registerObject(laser2);
+        lasers.add(laser1);
+        lasers.add(laser2);
 
     }
 }
