@@ -38,4 +38,5 @@ public class Crab extends HittableIslandObject {
         }
         return false;
     }
+
 }
