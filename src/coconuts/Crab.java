@@ -29,4 +29,13 @@ public class Crab extends HittableIslandObject {
         }
         display();
     }
+
+    // TODO
+    /**
+     * Create a way to find when the crab gets hit by a coconut.
+     * Have it update its observers when it gets hit.
+     * End the game when this happens.
+     * Reset button needed for ^
+     * Use HitEvent?
+     */
 }

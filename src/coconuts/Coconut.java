@@ -16,4 +16,12 @@ public class Coconut extends HittableIslandObject {
     public void step() {
         y += 5;
     }
+
+    // TODO
+    /**
+     * Create code to find when a coconut hits the ground and make it disappear.
+     * Create code to find when a coconut is hit by a laser.
+     * Have it update its observers when a coconut hits the ground or is hit by a laser.
+     * Use HitEvent?
+     */
 }
