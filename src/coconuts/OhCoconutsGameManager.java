@@ -118,14 +118,22 @@ public class OhCoconutsGameManager {
         for(Coconut c : coconuts) {
             if(theCrab != null && theCrab.coconutHit(c.getX(), c.getY())) {
                 //TODO properly call observer
+                //move this stuff into update method
+                gamePane.getChildren().remove(theCrab.getImageView());
+                allObjects.remove(theCrab);
+                killCrab();
+
                 System.out.println("Coconut hit");
                 scheduleForDeletion(c);
             }
 
             for(LaserBeam b : lasers) {
                 if(theCrab != null && b.coconutHit(c.getX(), c.getY())) {
+                    //TODO properly call observer
+                    //move this stuff into update method
                     System.out.println("Laser hit");
                     scheduleForDeletion(c);
+                    scheduleForDeletion(b);
                 }
             }
 
@@ -134,14 +142,13 @@ public class OhCoconutsGameManager {
         // actually remove the objects as needed
         for (IslandObject thisObj : scheduledForRemoval) {
             allObjects.remove(thisObj);
-            if(coconuts.contains(thisObj)) {
-                coconuts.remove(thisObj);
-                gamePane.getChildren().remove(thisObj.getImageView());
-                thisObj.removeImage();
-            }
+            coconuts.remove(thisObj);
+            lasers.remove(thisObj);
             if (thisObj instanceof HittableIslandObject) {
                 hittableIslandSubjects.remove((HittableIslandObject) thisObj);
             }
+            gamePane.getChildren().remove(thisObj.getImageView());
+            thisObj.removeImage();
         }
         scheduledForRemoval.clear();
     }
@@ -167,5 +174,10 @@ public class OhCoconutsGameManager {
         lasers.add(laser1);
         lasers.add(laser2);
 
+    }
+
+    public void resetGame() {
+        gamePane.getChildren().clear();
+        allObjects.clear();
     }
 }

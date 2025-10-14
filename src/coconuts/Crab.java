@@ -34,10 +34,8 @@ public class Crab extends HittableIslandObject {
     public boolean coconutHit(int coconutX, int coconutY) {
         if(coconutX > x-WIDTH && coconutX < x + WIDTH &&
                 coconutY > y - WIDTH/2 && coconutY < y + WIDTH){
-            // TODO notify observers and delete carb
             return true;
         }
-
         return false;
     }
 }

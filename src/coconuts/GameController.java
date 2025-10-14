@@ -53,14 +53,14 @@ public class GameController {
 
     @FXML
     public void onKeyPressed(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.RIGHT && !theGame.done() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
+        if (keyEvent.getCode() == KeyCode.RIGHT && theGame.getCrab() != null && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
             if(keyEvent.isShiftDown()){
                 theGame.getCrab().crawl(30);
             } else {
                 theGame.getCrab().crawl(10);
             }
 
-        } else if (keyEvent.getCode() == KeyCode.LEFT && !theGame.done() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
+        } else if (keyEvent.getCode() == KeyCode.LEFT && theGame.getCrab() != null && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
             if(keyEvent.isShiftDown()){
                 theGame.getCrab().crawl(-30);
             } else {
@@ -74,9 +74,15 @@ public class GameController {
                 coconutTimeline.pause();
                 started = false;
             }
-        } else if (keyEvent.getCode() == KeyCode.UP && !theGame.done() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
+        } else if (keyEvent.getCode() == KeyCode.UP && theGame.getCrab() != null && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
             theGame.makeLaser();
         }
-        // TODO add key event if it is r to reset the game
+        if(keyEvent.getCode() == KeyCode.R) {
+            theGame.resetGame();
+            theGame = null;
+            coconutTimeline.pause();
+            coconutTimeline = null;
+            initialize();
+        }
     }
 }
