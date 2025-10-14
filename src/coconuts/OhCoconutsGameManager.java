@@ -83,6 +83,7 @@ public class OhCoconutsGameManager {
             Coconut c = new Coconut(this, (int) (Math.random() * width));
             registerObject(c);
             coconuts.add(c);
+            c.attach(new CocoGroundObserver());
             gamePane.getChildren().add(c.getImageView());
         }
         gameTick++;
@@ -137,6 +138,10 @@ public class OhCoconutsGameManager {
                 }
             }
 
+            if (c.getY() >= theCrab.getY()) {
+                scheduleForDeletion(c);
+                c.notifyObservers();
+            }
         }
 
         // actually remove the objects as needed
