@@ -55,6 +55,7 @@ public class OhCoconutsGameManager {
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
+        theCrab.attach(new CocoCarbObserver());
     }
 
     private void registerObject(IslandObject object) {
@@ -106,25 +107,13 @@ public class OhCoconutsGameManager {
         // you can't change the lists while processing them, so collect
         //   items to be removed in the first pass and remove them later
         scheduledForRemoval.clear();
-        for (IslandObject thisObj : allObjects) {
-            for (HittableIslandObject hittableObject : hittableIslandSubjects) {
-                if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
-                    // TODO: add code here to process the hit
-                    scheduledForRemoval.add(hittableObject);
-                    gamePane.getChildren().remove(hittableObject.getImageView());
-                }
-            }
-        }
 
         for(Coconut c : coconuts) {
             if(theCrab != null && theCrab.coconutHit(c.getX(), c.getY())) {
-                //TODO properly call observer
-                //move this stuff into update method
+                theCrab.notifyObservers();
                 gamePane.getChildren().remove(theCrab.getImageView());
                 allObjects.remove(theCrab);
                 killCrab();
-
-                System.out.println("Coconut hit");
                 scheduleForDeletion(c);
             }
 
@@ -132,8 +121,10 @@ public class OhCoconutsGameManager {
                 if(theCrab != null && b.coconutHit(c.getX(), c.getY())) {
                     //TODO properly call observer
                     //move this stuff into update method
-                    System.out.println("Laser hit");
                     scheduleForDeletion(c);
+                    scheduleForDeletion(b);
+                }
+                if(b.getY() < 0){
                     scheduleForDeletion(b);
                 }
             }
