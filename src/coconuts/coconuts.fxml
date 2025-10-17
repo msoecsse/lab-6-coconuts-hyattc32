@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" maxHeight="650.0" minHeight="650.0" onKeyPressed="#onKeyPressed" prefHeight="650.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coconuts.GameController">
+<GridPane alignment="center" hgap="10" maxHeight="650.0" minHeight="650.0" onKeyPressed="#onKeyPressed" prefHeight="650.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coconuts.GameController">
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
@@ -58,7 +58,17 @@
             </font>
          </Label>
         </HBox>
-        <Pane id="theGame" fx:id="gamePane" maxHeight="550.0" minHeight="550.0" prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, derive(skyblue, 20%), derive(skyblue, -40%));" />
+        <Pane id="theGame" fx:id="gamePane" maxHeight="550.0" minHeight="550.0" prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, derive(skyblue, 20%), derive(skyblue, -40%));">
+         <children>
+            <Label fx:id="shotText" layoutX="3.0" layoutY="519.0" text="Shots: " textFill="WHITE">
+               <font>
+                  <Font name="Poor Richard" size="18.0" />
+               </font></Label>
+            <Label fx:id="shotsLabel" layoutX="47.0" layoutY="521.0" text="5" textFill="WHITE">
+               <font>
+                  <Font name="Poor Richard" size="18.0" />
+               </font></Label>
+         </children></Pane>
         <Pane id="theBeach" fx:id="theBeach" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, derive(tan, 30%), derive(tan, -50%));">
             <HBox prefHeight="50.0" prefWidth="600.0">
                 <VBox prefHeight="50.0" prefWidth="300.0">
@@ -100,4 +110,5 @@
             </HBox>
         </Pane>
     </VBox>
+   <Label text="Label" />
 </GridPane>

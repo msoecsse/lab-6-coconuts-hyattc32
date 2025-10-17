@@ -2,6 +2,7 @@ package coconuts;
 
 // https://stackoverflow.com/questions/42443148/how-to-correctly-separate-view-from-model-in-javafx
 
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -28,6 +29,11 @@ public class OhCoconutsGameManager {
 
     private List<Coconut> coconuts;
     private List<LaserBeam> lasers;
+    private List<DyingCoco> cocofires;
+    private int shootTimer;
+    private int shootAmount;
+
+    private boolean crabDead;
 
     private MediaPlayer mediaPlayer;
     private Media media;
@@ -36,9 +42,14 @@ public class OhCoconutsGameManager {
         this.height = height;
         this.width = width;
         this.gamePane = gamePane;
+        crabDead = false;
+        shootAmount = 5;
+        shootTimer = 30;
+        GameController.shotsLeft.setText(String.valueOf(shootAmount));
 
         coconuts = new LinkedList<>();
         lasers = new LinkedList<>();
+        cocofires = new LinkedList<>();
 
         this.theCrab = new Crab(this, height, width);
         registerObject(theCrab);
@@ -95,10 +106,24 @@ public class OhCoconutsGameManager {
     }
 
     public void killCrab() {
+        theCrab.getImageView().setRotate(180);
+        crabDead = true;
         theCrab = null;
+    }
+    public boolean isCrabDead(){
+        return crabDead;
     }
 
     public void advanceOneTick() {
+        shootTimer--;
+        if(shootTimer <= 0){
+            shootTimer = 30;
+            if(shootAmount < 5){
+                shootAmount++;
+                GameController.shotsLeft.setText(String.valueOf(shootAmount));
+            }
+        }
+
         for (IslandObject o : allObjects) {
             o.step();
             o.display();
@@ -108,6 +133,13 @@ public class OhCoconutsGameManager {
         //   items to be removed in the first pass and remove them later
         scheduledForRemoval.clear();
 
+        for(DyingCoco dc: cocofires) {
+            if(dc.getDyingCount() <= 0){
+                scheduledForRemoval.add(dc);
+
+            }
+        }
+
         for(Coconut c : coconuts) {
             if(theCrab != null) {
                 for(LaserBeam b : lasers) {
@@ -115,6 +147,11 @@ public class OhCoconutsGameManager {
                         b.notifyObservers();
                         scheduleForDeletion(c);
                         scheduleForDeletion(b);
+                        DyingCoco dc = new DyingCoco(this, c.getX(), c.getY(), c.width);
+                        allObjects.add(dc);
+                        cocofires.add(dc);
+                        gamePane.getChildren().add(dc.getImageView());
+
                     }
                     if(b.getY() < 0){
                         scheduleForDeletion(b);
@@ -128,7 +165,7 @@ public class OhCoconutsGameManager {
 
                 if(theCrab.coconutHit(c.getX(), c.getY())) {
                     theCrab.notifyObservers();
-                    gamePane.getChildren().remove(theCrab.getImageView());
+//                    gamePane.getChildren().remove(theCrab.getImageView());
                     allObjects.remove(theCrab);
                     killCrab();
                     scheduleForDeletion(c);
@@ -142,6 +179,7 @@ public class OhCoconutsGameManager {
             allObjects.remove(thisObj);
             coconuts.remove(thisObj);
             lasers.remove(thisObj);
+            cocofires.remove(thisObj);
             if (thisObj instanceof HittableIslandObject) {
                 hittableIslandSubjects.remove((HittableIslandObject) thisObj);
             }
@@ -162,22 +200,29 @@ public class OhCoconutsGameManager {
     //makes a laser of both sides of a crab
     //and adds them to the list of every object -Jacob
     public void makeLaser(){
-        LaserBeam laser1 = new LaserBeam(this, theCrab.getY(), theCrab.getX());
-        gamePane.getChildren().add(laser1.getImageView());
-        LaserBeam laser2 = new LaserBeam(this, theCrab.getY(), theCrab.getX() + theCrab.width);
-        gamePane.getChildren().add(laser2.getImageView());
+        if(shootAmount > 0) {
+            LaserBeam laser1 = new LaserBeam(this, theCrab.getY(), theCrab.getX());
+            gamePane.getChildren().add(laser1.getImageView());
+            LaserBeam laser2 = new LaserBeam(this, theCrab.getY(), theCrab.getX() + theCrab.width);
+            gamePane.getChildren().add(laser2.getImageView());
 
-        registerObject(laser1);
-        registerObject(laser2);
-        lasers.add(laser1);
-        lasers.add(laser2);
-        laser1.attach(new CocoLaserObserver());
-        laser2.attach(new CocoLaserObserver());
+            registerObject(laser1);
+            registerObject(laser2);
+            lasers.add(laser1);
+            lasers.add(laser2);
+            laser1.attach(new CocoLaserObserver());
+            laser2.attach(new CocoLaserObserver());
+            shootAmount--;
+            GameController.shotsLeft.setText(String.valueOf(shootAmount));
+
+        }
 
     }
 
     public void resetGame() {
         gamePane.getChildren().clear();
         allObjects.clear();
+        gamePane.getChildren().add(GameController.shotsLeft);
+        gamePane.getChildren().add(GameController.shotsText);
     }
 }

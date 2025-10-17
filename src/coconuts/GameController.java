@@ -33,14 +33,22 @@ public class GameController {
     public Label cocoOnGroundLabel;
     @FXML
     private Label cocoDestroyedLabel;
+    @FXML
+    private Label shotsLabel;
+    @FXML
+    private Label shotText;
 
     public static Label cocoLaserLabel;
     public static Label cocoHitGroundLabel;
+    public static Label shotsLeft;
+    public static Label shotsText;
 
     @FXML
     public void initialize() {
         cocoLaserLabel = cocoDestroyedLabel;
         cocoHitGroundLabel = cocoOnGroundLabel;
+        shotsLeft = shotsLabel;
+        shotsText = shotText;
 
         theGame = new OhCoconutsGameManager((int) (gamePane.getPrefHeight() - theBeach.getPrefHeight()),
                 (int) (gamePane.getPrefWidth()), gamePane);
@@ -49,7 +57,9 @@ public class GameController {
 
         coconutTimeline = new Timeline(new KeyFrame(Duration.millis(MILLISECONDS_PER_STEP), (e) -> {
             theGame.tryDropCoconut();
-            theGame.advanceOneTick();
+            if(!theGame.isCrabDead()) {
+                theGame.advanceOneTick();
+            }
             if (theGame.done())
                 coconutTimeline.pause();
         }));
@@ -58,20 +68,20 @@ public class GameController {
 
     @FXML
     public void onKeyPressed(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.RIGHT && theGame.getCrab() != null && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
+        if (keyEvent.getCode() == KeyCode.RIGHT && !theGame.isCrabDead() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
             if(keyEvent.isShiftDown()){
                 theGame.getCrab().crawl(30);
             } else {
                 theGame.getCrab().crawl(10);
             }
 
-        } else if (keyEvent.getCode() == KeyCode.LEFT && theGame.getCrab() != null && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
+        } else if (keyEvent.getCode() == KeyCode.LEFT && !theGame.isCrabDead() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
             if(keyEvent.isShiftDown()){
                 theGame.getCrab().crawl(-30);
             } else {
                 theGame.getCrab().crawl(-10);
             }
-        } else if (keyEvent.getCode() == KeyCode.SPACE && theGame.getCrab() != null) {
+        } else if (keyEvent.getCode() == KeyCode.SPACE && !theGame.isCrabDead()) {
             if (!started) {
                 coconutTimeline.play();
                 started = true;
@@ -79,7 +89,7 @@ public class GameController {
                 coconutTimeline.pause();
                 started = false;
             }
-        } else if (keyEvent.getCode() == KeyCode.UP && theGame.getCrab() != null && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
+        } else if (keyEvent.getCode() == KeyCode.UP && !theGame.isCrabDead() && coconutTimeline.getStatus() == Timeline.Status.RUNNING) {
             theGame.makeLaser();
         }
 
@@ -90,6 +100,7 @@ public class GameController {
             coconutTimeline = null;
             cocoHitGroundLabel.setText("0");
             cocoLaserLabel.setText("0");
+            shotsLeft.setText("5");
             initialize();
         }
 
